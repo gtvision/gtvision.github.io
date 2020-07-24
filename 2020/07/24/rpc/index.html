@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>rpc框架介绍 | 固高视觉团队博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="架构,通讯">
+    <meta name="description" content="Remote Procedure Call 远程过程调用。 一、应用场景考虑 A 和 B 之间相互调用的问题。  A 和 B 是同一个程序内的两个对象；  123456class A &amp;#123; void fooA(); &amp;#125;;class B &amp;#123;     void fooB(A&amp; a) &amp;#123; a.fooA(); &amp;#125; &amp;#125;;   A 和 B 是同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rpc框架介绍">
+<meta property="og:url" content="http://yoursite.com/2020/07/24/rpc/index.html">
+<meta property="og:site_name" content="固高视觉团队博客">
+<meta property="og:description" content="Remote Procedure Call 远程过程调用。 一、应用场景考虑 A 和 B 之间相互调用的问题。  A 和 B 是同一个程序内的两个对象；  123456class A &amp;#123; void fooA(); &amp;#125;;class B &amp;#123;     void fooB(A&amp; a) &amp;#123; a.fooA(); &amp;#125; &amp;#125;;   A 和 B 是同">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picb.zhimg.com/80/45366c44f775abfd0ac3b43bccc1abc3_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="c:/Users/86153/AppData/Roaming/Typora/typora-user-images/image-20200724140350772.png">
+<meta property="article:published_time" content="2020-07-24T08:15:33.000Z">
+<meta property="article:modified_time" content="2020-07-24T08:16:10.928Z">
+<meta property="article:author" content="GtVision">
+<meta property="article:tag" content="架构">
+<meta property="article:tag" content="通讯">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picb.zhimg.com/80/45366c44f775abfd0ac3b43bccc1abc3_720w.jpg?source=1940ef5c">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">GtVision</h5>
+          <a href="mailto:li.zhan@googoltech.com" title="li.zhan@googoltech.com" class="mail">li.zhan@googoltech.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/gtvision" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">rpc框架介绍</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">rpc框架介绍</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-07-24T08:15:33.000Z" itemprop="datePublished" class="page-time">
+  2020-07-24
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一、应用场景"><span class="post-toc-number">1.</span> <span class="post-toc-text">一、应用场景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#二、基础设施"><span class="post-toc-number">2.</span> <span class="post-toc-text">二、基础设施</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-1-通讯库"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">2.1 通讯库</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-2-数据封装"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">2.2 数据封装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-3-接口封装"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">2.3 接口封装</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-rpc"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">rpc框架介绍</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-07-24 16:15:33" datetime="2020-07-24T08:15:33.000Z"  itemprop="datePublished">2020-07-24</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Remote Procedure Call 远程过程调用。</p>
+<h2 id="一、应用场景"><a href="#一、应用场景" class="headerlink" title="一、应用场景"></a>一、应用场景</h2><p>考虑 A 和 B 之间相互调用的问题。</p>
+<ol>
+<li>A 和 B 是同一个程序内的两个对象；</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span> <span class="function"><span class="keyword">void</span> <span class="title">fooA</span><span class="params">()</span></span>; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fooB</span><span class="params">(A&amp; a)</span> </span>&#123; a.fooA(); &#125; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>A 和 B 是同一台机的两个程序；</li>
+</ol>
+<ul>
+<li>通过通讯，传递数据；</li>
+<li>通过操作系统提供的共享内存；</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">QSharedMemory <span class="title">sharedMemory</span><span class="params">(<span class="string">"sharemem_name"</span>)</span></span>;</span><br><span class="line">sharedMemory.create(<span class="built_in">size</span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>A 和 B 是不同机器上的两个程序；</li>
+</ol>
+<p>此时，只能通过通讯来传递数据。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://picb.zhimg.com/80/45366c44f775abfd0ac3b43bccc1abc3_720w.jpg?source=1940ef5c" alt="img" title="">
+                </div>
+                <div class="image-caption">img</div>
+            </figure>
+
+<ul>
+<li>建立通讯连接；</li>
+<li>A 发起调用，告知 B 要执行什么，参数是什么，封装成字符串等数据格式发送出去；</li>
+<li>B 解析数据，执行并返回结果数据；</li>
+<li>A 解析结果，放在内存中。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fooA</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123; <span class="keyword">return</span> -a; &#125;</span><br><span class="line"></span><br><span class="line">server = createServer(addr);</span><br><span class="line">server.bind(<span class="string">"fooA"</span>, &amp;fooA);</span><br><span class="line">server.<span class="built_in">run</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// client</span></span><br><span class="line">client = createClient(addr);</span><br><span class="line"><span class="keyword">int</span> result = client.call&lt;<span class="keyword">void</span>&gt;(<span class="string">"fooA"</span>, <span class="number">10</span>).result();</span><br></pre></td></tr></table></figure>
+
+
+
+<p>实现一条生产线，里面包含视觉，运动控制，PLC，运动机构，边缘计算节点等等，如果生产线每个单元都要实现协作，必须要有机结合起来，必须要相互沟通。</p>
+<h2 id="二、基础设施"><a href="#二、基础设施" class="headerlink" title="二、基础设施"></a>二、基础设施</h2><ol>
+<li>通讯库；</li>
+<li>数据封装；</li>
+<li>接口封装。</li>
+</ol>
+<h3 id="2-1-通讯库"><a href="#2-1-通讯库" class="headerlink" title="2.1 通讯库"></a>2.1 通讯库</h3><p>我们依照muduo的思想，实现了一个通讯库。</p>
+<p>关键的优势在于：性能？使用简单？异步？</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="C:\Users\86153\AppData\Roaming\Typora\typora-user-images\image-20200724140350772.png" alt="image-20200724140350772" title="">
+                </div>
+                <div class="image-caption">image-20200724140350772</div>
+            </figure>
+
+<p>主要介绍一下 Timer 的实现。</p>
+<p>Timer 主要实现的功能是，过一段确定的时间，执行某个任务，或者每隔一段时间，就执行对应任务。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">runAfter</span><span class="params">(<span class="keyword">long</span> relay_ms, <span class="keyword">const</span> Functor&amp; cb)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">runEvery</span><span class="params">(<span class="keyword">long</span> relay_ms, <span class="keyword">const</span> Functor&amp; cb)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>所有的网络库都应该集成定时器的功能：</p>
+<ul>
+<li><p>心跳</p>
+</li>
+<li><p>延时处理实现异步操作，例如 client 的异步连接</p>
+<p>……</p>
+</li>
+</ul>
+<p>每个定时器任务，都会注册到 TimerQueue 中，由 TimerQueue 决定 Timer 是否要被执行。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::priority_queue&lt;ulong&gt; timestamp_queue_;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">multimap</span>&lt;ulong, Functor&gt; timer_map_;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-数据封装"><a href="#2-2-数据封装" class="headerlink" title="2.2 数据封装"></a>2.2 数据封装</h3><p>需要一种 A 和 B 之间都能懂的语言来描述需要交互的数据。</p>
+<p>第一种，不考虑可读性，最好传递二进制流，对应的代表产品有 Google 的 Protobuf 。</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> tutorial;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">    <span class="comment">// 必须提供字段值，否则对应的消息就会被认为是“未初始化的”</span></span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">uint64</span> id = <span class="number">1</span>;  </span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">string</span> name =<span class="number">2</span>; </span><br><span class="line">    <span class="comment">// 字段值指定与否都可以。如果没有指定一个optional的字段值，它就会使用默认值。</span></span><br><span class="line">    <span class="keyword">optional</span> <span class="built_in">string</span> email = <span class="number">3</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// required uint64 id = 1;</span></span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">has_id</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">clear_id</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> kIdFieldNumber = <span class="number">1</span>;</span><br><span class="line"> <span class="keyword">inline</span> ::google::<span class="function">protobuf::uint64 <span class="title">id</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_id</span><span class="params">(::google::protobuf::uint64 value)</span></span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// required string name = 2;</span></span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">has_name</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">clear_name</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> kNameFieldNumber = <span class="number">2</span>;</span><br><span class="line"> <span class="keyword">inline</span> <span class="keyword">const</span> ::<span class="function"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; <span class="title">name</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_name</span><span class="params">(<span class="keyword">const</span> ::<span class="built_in">std</span>::<span class="built_in">string</span>&amp; value)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* value)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* value, <span class="keyword">size_t</span> <span class="built_in">size</span>)</span></span>;</span><br><span class="line"> <span class="keyword">inline</span> ::<span class="function"><span class="built_in">std</span>::<span class="built_in">string</span>* <span class="title">mutable_name</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="keyword">inline</span> ::<span class="function"><span class="built_in">std</span>::<span class="built_in">string</span>* <span class="title">release_name</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_allocated_name</span><span class="params">(::<span class="built_in">std</span>::<span class="built_in">string</span>* name)</span></span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// optional string email = 3;</span></span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">has_email</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">clear_email</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> kEmailFieldNumber = <span class="number">3</span>;</span><br><span class="line"> <span class="keyword">inline</span> <span class="keyword">const</span> ::<span class="function"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; <span class="title">email</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_email</span><span class="params">(<span class="keyword">const</span> ::<span class="built_in">std</span>::<span class="built_in">string</span>&amp; value)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_email</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* value)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_email</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* value, <span class="keyword">size_t</span> <span class="built_in">size</span>)</span></span>;</span><br><span class="line"> <span class="keyword">inline</span> ::<span class="function"><span class="built_in">std</span>::<span class="built_in">string</span>* <span class="title">mutable_email</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="keyword">inline</span> ::<span class="function"><span class="built_in">std</span>::<span class="built_in">string</span>* <span class="title">release_email</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">set_allocated_email</span><span class="params">(::<span class="built_in">std</span>::<span class="built_in">string</span>* email)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>第二种，可以直接使用 JSON，作为传输格式。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"method"</span>:<span class="string">"Arithmetic.Add"</span>,</span><br><span class="line">    <span class="attr">"params"</span>: &#123;</span><br><span class="line">        <span class="attr">"lhs"</span>:<span class="number">3.0</span>,</span><br><span class="line">        <span class="attr">"rhs"</span>:<span class="number">6.0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"id"</span>:<span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-接口封装"><a href="#2-3-接口封装" class="headerlink" title="2.3 接口封装"></a>2.3 接口封装</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRPC</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">createServer</span><span class="params">(SocketAddr addr)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">createClient</span><span class="params">(SocketAddr addr)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">bind</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> name, Functor func)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function">T <span class="title">call</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> name, ...)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callAsync</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> name, Functor done_cb, ...)</span></span>;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MyRpc server;</span><br><span class="line">server.createServer(<span class="string">"127.0.0.1:5000"</span>);</span><br><span class="line">server.bind(<span class="string">"add"</span>, &amp;add);</span><br><span class="line"></span><br><span class="line">MyRpc client;</span><br><span class="line">client.createClient(<span class="string">"127.0.0.1:5000"</span>);</span><br><span class="line"><span class="keyword">int</span> result = client.call&lt;<span class="keyword">int</span>&gt;(<span class="string">"add"</span>, <span class="number">10</span>, <span class="number">20</span>);	<span class="comment">// 需要做同步处理</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        欢迎投稿至固高视觉团队！
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="GtVision">
+            GtVision
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%80%9A%E8%AE%AF/" rel="tag">通讯</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/24/rpc/&title=《rpc框架介绍》 — 固高视觉团队博客&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/24/rpc/&title=《rpc框架介绍》 — 固高视觉团队博客&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/07/24/rpc/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《rpc框架介绍》 — 固高视觉团队博客&url=http://yoursite.com/2020/07/24/rpc/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/07/24/rpc/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/07/17/gtest/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Google Test测试框架</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>GtVision &copy; 2015 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/24/rpc/&title=《rpc框架介绍》 — 固高视觉团队博客&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/24/rpc/&title=《rpc框架介绍》 — 固高视觉团队博客&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/07/24/rpc/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《rpc框架介绍》 — 固高视觉团队博客&url=http://yoursite.com/2020/07/24/rpc/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/07/24/rpc/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2020/07/24/rpc/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
